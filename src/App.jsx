@@ -11,7 +11,7 @@ function App() {
     <CodeEditor
       value={code}
       editorType="FORMULA"
-      eoAutoComplete={[
+      autoComplete={[
         { label: "table_one", type: "keyword" },
         { label: "table_two", type: "keyword" },
         { label: "table_two_123", type: "keyword" },
@@ -25,7 +25,7 @@ function App() {
           ],
         },
       ]}
-      eoKeywordMatching={[
+      keywordMatching={[
         {
           label: "hhhh",
           attributes: {

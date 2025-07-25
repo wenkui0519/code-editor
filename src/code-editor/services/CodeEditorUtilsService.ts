@@ -41,8 +41,8 @@ export function getBaseTheme(): Extension {
 export function autocompletionWord(): Extension {
     return autocompletion({
         closeOnBlur: true,
-        tooltipClass: (state: EditorState) => { return 'eo-code-editor-autocomplete-list' },
-        optionClass: (completion: Completion) => { return 'eo-code-editor-autocomplete-option' },
+        tooltipClass: (state: EditorState) => { return 'code-editor-autocomplete-list' },
+        optionClass: (completion: Completion) => { return 'code-editor-autocomplete-option' },
         // icons: false,
         // addToOptions: [{
         //     render: (completion, state, view) => {

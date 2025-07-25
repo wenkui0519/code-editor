@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { EditorView } from '@codemirror/view';
 import { CodeEditorBaseService } from '../services/CodeEditorBaseService';
-import type { EoCodeEditorType } from '../interfaces';
+import type { CodeEditorType } from '../interfaces';
 import { changeValue } from '../services/CodeEditorUtilsService';
 
 const baseService = new CodeEditorBaseService();
@@ -29,13 +29,8 @@ export const useCodeEditor = () => {
         }
     }, []);
 
-    const formatCode = useCallback((view: EditorView, type: EoCodeEditorType) => {
-        baseService.format(view, type);
-    }, []);
-
     return {
         initializeEditor,
         updateEditor,
-        formatCode,
     };
 };

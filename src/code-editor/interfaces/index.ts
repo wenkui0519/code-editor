@@ -1,5 +1,5 @@
 /** 编辑器类型 */
-export type EoCodeEditorType =
+export type CodeEditorType =
     | 'SQL' // SQL 编辑器
     | 'JS' // JavaScript 编辑器
     | 'HTML' // htm 编辑器
@@ -11,43 +11,13 @@ export type EoCodeEditorType =
 
 
 
-/** 工具栏菜单 */
-export interface EoToolbarMenuModel {
-    /** 菜单标题 */
-    title: string;
-
-    /** 鼠标悬浮在菜单上的提示文字 */
-    tooltip?: string;
-
-    /**
-     * 要向编辑器中插入的内容
-     * 会插入到光标所在位置, 或将光标选中的位置替换成给定的值;
-     */
-    insetContent?: string | ((editorView) => string);
-
-    /**
-     * 当前菜单的点击回调事件;
-     * 参数 menuItem: 当前点击的菜单项;
-     */
-    onClick?: (menuItem: EoToolbarMenuModel) => void;
-
-    /** 子菜单; (目前仅支持到二级子菜单) */
-    children?: EoToolbarMenuModel[];
-
-    callback?: (editorView) => void;
-
-    // other
-    [key: string]: any;
-}
-
-
 /** 编辑器关键字的自动补全提示 */
-export interface EoAutoCompleteModel {
+export interface AutoCompleteModel {
     /** 关键字 */
     label: string;
 
     /** 关键字的类型; (关键字前的图标, 不同类型对应不同图标) */
-    type?: EoAutoCompleteType;
+    type?: AutoCompleteType;
 
     /** 选择完成时显示的附加信息。可以是纯字符串或在调用时呈现 DOM 结构以显示的函数。 */
     info?: string;
@@ -59,7 +29,7 @@ export interface EoAutoCompleteModel {
      * @description 上下文补全提示
      * @description 当前关键字按"."键触发，会显示上下文补全提示
      *  */
-    children?: EoAutoCompleteModel[];
+    children?: AutoCompleteModel[];
 
     // other
     [key: string]: any;
@@ -69,7 +39,7 @@ export interface EoAutoCompleteModel {
 /**
  * @description 关键字匹配
  */
-export interface EoKeywordMatchingModel {
+export interface KeywordMatchingModel {
     /** 关键字 */
     label: string;
 
@@ -101,7 +71,7 @@ export interface EoKeywordMatchingModel {
     inclusive?: boolean;
 
     /** 上下文关键字列表 */
-    children?: EoKeywordMatchingModel[];
+    children?: KeywordMatchingModel[];
 }
 
 
@@ -120,14 +90,19 @@ export interface SearchFormModel {
     /** 要替换的字符串 */
     replace?: string;
 }
-/**
- * @description 工具栏菜单类型
- * @params EoToolbarMenuModel 自定义
- * @params 'format' 格式化
- */
-export type ToolbarMenuType = EoToolbarMenuModel | 'format' | string;
 
-type EoAutoCompleteType =
+// 键盘映射模型
+export interface KeyMapModel {
+    // win键盘映射按键
+    key: string;
+    // mac键盘映射按键
+    mac: AutoCompleteType;
+    // 运行时触发的按键
+    run: (view) => boolean;
+}
+
+
+type AutoCompleteType =
     | 'class' // 类
     | 'constant' // 常量
     | 'enum' // 枚举
@@ -173,21 +148,18 @@ export enum PublicMethod {
 
 
 export interface CodeEditorProps {
-    disabled?: boolean; // 是否禁用编辑器
     value?: string; // 编辑器的初始值
-    directiveId?: string; // 指令ID
-    editorType?: EoCodeEditorType; // 编辑器类型
-    eoToolbarMenu?: ToolbarMenuType[]; // 工具栏菜单
-    eoAutoComplete?: EoAutoCompleteModel[]; // 自动补全列表
-    eoIndentUnit?: number; // 缩进单位
-    eoKeywordMatching?: EoKeywordMatchingModel[]; // 关键字匹配列表
-    placeholder?: string; // 占位符文本
-    eoInitMatchList?: any[] | null; // 初始化匹配列表
-    eoLineWrapping?: boolean; // 是否启用行换行
-    eoInsertPlaceholder?: boolean; // 是否启用插入占位符
+    disabled?: boolean; // 是否禁用编辑器
+    editorType?: CodeEditorType; // 编辑器类型
+    autoComplete?: AutoCompleteModel[]; // 自动补全列表
+    indentUnit?: number; // 缩进单位
+    placeholder?: string; // 提示文字
+    lineWrapping?: boolean; // 是否启用行换行
     autoFocus?: boolean; // 是否自动聚焦
     inclusive?: boolean; // 是否将关键字匹配视为整体
-    expanded?: boolean; // 默认展开操作栏
+    keywordMatching?: KeywordMatchingModel[]; // 关键字匹配列表
+    initMatchList?: any[] | null; // 初始化匹配列表
+    keyMap?: KeyMapModel[]; // 键盘映射
     customMatchRule?: (keyword: string) => (contentDOM: HTMLElement) => any; // 自定义匹配规则
     onClickMirror?: (event: MouseEvent) => void; // 点击编辑器时的回调
     matchListChange?: (matchList: any[]) => void; // 匹配列表变化时的回调

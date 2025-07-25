@@ -5,7 +5,7 @@ import * as prettierPluginJson from 'prettier/plugins/babel';
 import * as prettierPluginEstree from 'prettier/plugins/estree';
 import { completeFromList } from '@codemirror/autocomplete';
 import { linter, lintGutter } from '@codemirror/lint';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 import { CodeEditorContextualService } from '../services/CodeEditorContextualService';
 
 export class ExtraService {
@@ -17,10 +17,10 @@ export class ExtraService {
 
     /**
      * @description 获取 json 编辑器需要的扩展项
-     * @param {EoAutoCompleteModel[]} eoAutoComplete 编辑器关键字的自动补全提示
+     * @param {AutoCompleteModel[]} autoComplete 编辑器关键字的自动补全提示
      * @return {Extension[]}
      */
-    public getExtensions(autoComplete: EoAutoCompleteModel[] = []): Extension[] {
+    public getExtensions(autoComplete: AutoCompleteModel[] = []): Extension[] {
         // 获取上下文补全
         const contextual = this.codeEditorContextualService.getAutoCompleteConf(jsonLanguage, autoComplete);
 

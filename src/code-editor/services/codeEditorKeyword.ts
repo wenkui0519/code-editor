@@ -3,7 +3,7 @@ import { EditorView } from 'codemirror';
 import { Decoration, DecorationSet, MatchDecorator, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import * as _ from 'lodash';
 import { syntaxTree } from '@codemirror/language';
-import { EoKeywordMatchingModel } from '../interfaces';
+import { KeywordMatchingModel } from '../interfaces';
 
 export class CodeEditorKeywordService {
     // 编辑器实例
@@ -15,19 +15,19 @@ export class CodeEditorKeywordService {
 
     /**
      * @description 关键字匹配
-     * @param {EoKeywordMatchingModel[]} eoKeywordMatching 关键字匹配, 可以对匹配到的关键字设置样式类名, 设置行内样式、设置属性;
+     * @param {KeywordMatchingModel[]} keywordMatching 关键字匹配, 可以对匹配到的关键字设置样式类名, 设置行内样式、设置属性;
      * @return {Extension}
      */
     public keywordMatching(params: {
-        eoKeywordMatching: EoKeywordMatchingModel[],
+        keywordMatching: KeywordMatchingModel[],
         customMatchRule: (contentDOM: HTMLElement) => any;
         matchListChange: (list: any[]) => void,
         handleClick: (event) => void,
         initMatchList?: any[],
         inclusive?: boolean,
     }): Extension {
-        const { eoKeywordMatching = [], customMatchRule, matchListChange, handleClick, initMatchList = [] } = params;
-        const matchingList = this.initChildKeyword(eoKeywordMatching);
+        const { keywordMatching = [], customMatchRule, matchListChange, handleClick, initMatchList = [] } = params;
+        const matchingList = this.initChildKeyword(keywordMatching);
         const groupBy = _.groupBy(matchingList, 'label');
         let matchList: Map<string, any> = this.matchList;
         let size = 0;
@@ -83,7 +83,7 @@ export class CodeEditorKeywordService {
                     return null;
                 }
 
-                const current: EoKeywordMatchingModel = groupBy[matchText]?.[0];
+                const current: KeywordMatchingModel = groupBy[matchText]?.[0];
                 // 关键字看作整体的情况下
                 if (params.inclusive && current.inclusive) {
                     return Decoration.replace({
@@ -250,7 +250,7 @@ export class CodeEditorKeywordService {
                         handleClick(event);
                     }
                     // 点击关键字时，添加特殊样式。并选中选取
-                    if (target && target.classList.contains('cm-eo-keyword')) {
+                    if (target && target.classList.contains('cm-edc-keyword')) {
                         if (target['cmView']) {
                             const widgetView = target['cmView'],
                                 from = widgetView.posAtStart,
@@ -260,12 +260,12 @@ export class CodeEditorKeywordService {
                             });
                         }
                         // event.preventDefault();
-                        document.querySelectorAll('.cm-eo-keyword.active').forEach(el => el.classList.remove('active'));
+                        document.querySelectorAll('.cm-edc-keyword.active').forEach(el => el.classList.remove('active'));
                         target.classList.add('active');
                         return true;
                     } else {
                         // 光标注入到其它地方时移除选中状态
-                        document.querySelectorAll('.cm-eo-keyword.active').forEach(el => el.classList.remove('active'));
+                        document.querySelectorAll('.cm-edc-keyword.active').forEach(el => el.classList.remove('active'));
                     }
                     return false;
                 },
@@ -275,9 +275,9 @@ export class CodeEditorKeywordService {
         return plugin;
     }
     // 初始化关键字匹配列表。主要是为了处理子集列表。
-    private initChildKeyword(keywordMatching: EoKeywordMatchingModel[] = []) {
-        const matchingList: EoKeywordMatchingModel[] = [...keywordMatching];
-        const deep = (list: EoKeywordMatchingModel[] = [], isChild?, path: any[] = [], pLabel: any[] = []) => {
+    private initChildKeyword(keywordMatching: KeywordMatchingModel[] = []) {
+        const matchingList: KeywordMatchingModel[] = [...keywordMatching];
+        const deep = (list: KeywordMatchingModel[] = [], isChild?, path: any[] = [], pLabel: any[] = []) => {
             list.forEach((keyword: any) => {
                 let newWord;
                 let label = keyword.label;
@@ -339,7 +339,7 @@ class PlaceholderWidget extends WidgetType {
         }
         const span = document.createElement(this.tagName);
         span.textContent = this.text;
-        this.className = 'cm-eo-keyword ' + this.className;
+        this.className = 'cm-edc-keyword ' + this.className;
         span.className = this.className;
 
         // span.style.pointerEvents = 'none'; // 确保这个元素不响应点击

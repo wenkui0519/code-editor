@@ -3,7 +3,7 @@ import { EditorView } from 'codemirror';
 import { SQLConfig, sql, MySQL } from '@codemirror/lang-sql';
 import * as prettierPluginSql from 'prettier-plugin-sql';
 import { completeFromList } from '@codemirror/autocomplete';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 import { CodeEditorContextualService } from '../services/CodeEditorContextualService';
 
 export class ExtraService {
@@ -18,31 +18,31 @@ export class ExtraService {
 
     /**
      * @description 获取 SQL 编辑器需要的扩展项
-     * @param {EoAutoCompleteModel[]} eoAutoComplete 编辑器关键字的自动补全提示
+     * @param {AutoCompleteModel[]} autoComplete 编辑器关键字的自动补全提示
      * @return {Extension[]}
      */
-    public getExtensions(eoAutoComplete: EoAutoCompleteModel[]): Extension[] {
+    public getExtensions(autoComplete: AutoCompleteModel[]): Extension[] {
 
         const sqlConfig: SQLConfig = {
             dialect: MySQL,
             schema: {
                 table: [],
             },
-            // tables: eoAutoComplete ?? [],
+            // tables: autoComplete ?? [],
             upperCaseKeywords: true,
         };
 
         this.languageSupport = sql(sqlConfig);
 
         // 获取上下文补全
-        const contextual = this.codeEditorContextualService.getAutoCompleteConf(this.languageSupport.language, eoAutoComplete);
+        const contextual = this.codeEditorContextualService.getAutoCompleteConf(this.languageSupport.language, autoComplete);
 
         const sqlExtensions = [
             // sql(sqlConfig),
             this.languageSupport,
             // 自动补全
             this._completeConf.of(this.languageSupport.language.data.of({
-                autocomplete: completeFromList(eoAutoComplete),
+                autocomplete: completeFromList(autoComplete),
             })),
             // 上下文自动补全
             contextual,

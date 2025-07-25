@@ -9,19 +9,15 @@ import './index.scss';
 export const CodeEditor: React.FC<CodeEditorProps> = ({
     disabled,
     value,
-    directiveId,
     editorType,
-    eoToolbarMenu,
-    eoAutoComplete,
-    eoIndentUnit,
-    eoKeywordMatching,
+    autoComplete,
+    indentUnit,
+    keywordMatching,
     placeholder,
-    eoInitMatchList,
-    eoLineWrapping,
-    eoInsertPlaceholder,
+    initMatchList,
+    lineWrapping,
     autoFocus,
     inclusive,
-    expanded,
     customMatchRule,
     onClickMirror,
     matchListChange,
@@ -32,13 +28,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     const editorRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
     const [editorView, setEditorView] = useState<EditorView | null>(null);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchView, setSearchView] = useState(null);
 
     const {
         initializeEditor,
         updateEditor,
-        formatCode,
     } = useCodeEditor();
 
     useEffect(() => {
@@ -56,19 +49,19 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                         element: editorRef.current,
                         doc: value,
                         editorType,
-                        eoAutoComplete,
-                        eoKeywordMatching,
-                        eoIndentUnit,
+                        autoComplete,
+                        keywordMatching,
+                        indentUnit,
                         searchElement: searchRef.current,
-                        createSearchPanelBack: setSearchView,
                         customMatchRule,
-                        eoLineWrapping,
+                        lineWrapping,
                         placeholder,
-                        eoInsertPlaceholder,
                         inclusive,
                         onChange,
                         matchListChange,
                         onClick: onClickMirror,
+                        autoFocus,
+                        initMatchList,
                     });
 
                     // 确保组件未卸载再更新状态
@@ -94,24 +87,15 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             updateEditor(editorView, {
                 disabled,
                 value,
-                eoAutoComplete,
-                eoKeywordMatching,
+                autoComplete,
+                keywordMatching,
                 placeholder,
             });
         }
-    }, [disabled, value, eoAutoComplete, eoKeywordMatching, placeholder]);
+    }, [disabled, value, autoComplete, keywordMatching, placeholder]);
 
     return (
         <div className="code-editor-container">
-            {/* {toolbarMenu.length > 0 && (
-                <Toolbar
-                    menu={toolbarMenu}
-                    expanded={expanded}
-                    onFormat={() => editorView && formatCode(editorView, editorType)}
-                    onSearch={() => setIsSearchOpen(true)}
-                    editorView={editorView}
-                />
-            )} */}
             <div ref={editorRef} className="code-editor-content" />
             <SearchPanel
                 ref={searchRef}

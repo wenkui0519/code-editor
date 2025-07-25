@@ -6,7 +6,7 @@ import { linter, lintGutter } from '@codemirror/lint';
 import * as prettierPluginBabel from 'prettier/plugins/babel';
 import * as prettierPluginEstree from 'prettier/plugins/estree';
 import Linter from 'eslint4b-prebuilt';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 import { ESLINT_CONFIG } from '../interfaces/eslint.config';
 import { CodeEditorContextualService } from '../services/CodeEditorContextualService';
 
@@ -21,23 +21,23 @@ export class ExtraService {
 
     /**
      * @description 获取 js 编辑器需要的扩展项
-     * @param {EoAutoCompleteModel[]} eoAutoComplete 编辑器关键字的自动补全提示
+     * @param {AutoCompleteModel[]} autoComplete 编辑器关键字的自动补全提示
      * @param {boolean} isNeedWindow 是否需要全局变量
      * @param {jsx?: boolean;typescript?: boolean;} config
      * @return {Extension[]}
      */
-    public getExtensions(eoKeywordMatching: EoAutoCompleteModel[] = [], isNeedWindow: boolean = true, config?: {
+    public getExtensions(keywordMatching: AutoCompleteModel[] = [], isNeedWindow: boolean = true, config?: {
         jsx?: boolean;
         typescript?: boolean;
     }): Extension[] {
         this.isNeedWindow = isNeedWindow;
-        // eoKeywordMatching = [
+        // keywordMatching = [
         //     { label: 'match', type: 'keyword' },
         //     { label: 'hello', type: 'variable', info: '(World)' },
         //     { label: 'magic', type: 'text', apply: '⠁⭒*.✩.*⭒⠁', detail: 'macro' }
         // ];
         // js补全提示拓展
-        const jsCompletions = this.jsCompletions(eoKeywordMatching, isNeedWindow);
+        const jsCompletions = this.jsCompletions(keywordMatching, isNeedWindow);
         // eslint配置
         const esLintConfig = {
             'parserOptions': { ecmaVersion: 2019, sourceType: 'module' },
@@ -69,7 +69,7 @@ export class ExtraService {
         };
 
         // 获取上下文补全
-        const contextual = this.codeEditorContextualService.getAutoCompleteConf(javascriptLanguage, eoKeywordMatching);
+        const contextual = this.codeEditorContextualService.getAutoCompleteConf(javascriptLanguage, keywordMatching);
 
         // js配置
         const jsExtensions = [
@@ -87,7 +87,7 @@ export class ExtraService {
         return jsExtensions;
     }
     // js自动补全配置处理
-    private jsCompletions(eoKeywordMatching: EoAutoCompleteModel[] = [], isNeedWindow: boolean = true) {
+    private jsCompletions(keywordMatching: AutoCompleteModel[] = [], isNeedWindow: boolean = true) {
         const Identifier = /^[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*$/;
         return (context) => {
             const word = context.matchBefore(/\w*/);
@@ -108,10 +108,10 @@ export class ExtraService {
                     result = windowOptions;
                 }
             }
-            if (eoKeywordMatching && eoKeywordMatching.length) {
+            if (keywordMatching && keywordMatching.length) {
                 result.options = [
                     ...result.options,
-                    ...eoKeywordMatching,
+                    ...keywordMatching,
                 ];
             }
             return result;

@@ -3,8 +3,7 @@
 export { CodeEditor } from './CodeEditor';
 export type {
     CodeEditorProps,
-    EoCodeEditorType,
-    EoToolbarMenuModel,
-    EoAutoCompleteModel,
-    EoKeywordMatchingModel
+    CodeEditorType,
+    AutoCompleteModel,
+    KeywordMatchingModel
 } from './interfaces';

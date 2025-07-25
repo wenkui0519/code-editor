@@ -8,7 +8,7 @@ import Linter from 'eslint4b-prebuilt';
 import * as prettierPluginBabel from 'prettier/plugins/babel';
 import * as prettierPluginEstree from 'prettier/plugins/estree';
 import { ERROR_FILTER, ERROR_LABEL, FORMULA_LINT_CONFIG } from '../interfaces/eslint.config';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 import { CodeEditorContextualService } from '../services/CodeEditorContextualService';
 import { CodeEditorBaseService } from '../services/CodeEditorBaseService';
 
@@ -29,10 +29,10 @@ export class ExtraService {
 
     /**
      * @description 获取 FORMULA 编辑器需要的扩展项
-     * @param {EoAutoCompleteModel[]} eoAutoComplete 编辑器关键字的自动补全提示
+     * @param {AutoCompleteModel[]} autoComplete 编辑器关键字的自动补全提示
      * @return {Extension[]}
      */
-    public getExtensions(autoComplete: EoAutoCompleteModel[] = []): Extension[] {
+    public getExtensions(autoComplete: AutoCompleteModel[] = []): Extension[] {
         if (!autoComplete.length) {
             return [];
         }

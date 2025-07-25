@@ -3,7 +3,7 @@ import { EditorView } from 'codemirror';
 import { html, htmlLanguage } from '@codemirror/lang-html';
 import * as prettierPluginHtml from 'prettier/plugins/html';
 import { completeFromList } from '@codemirror/autocomplete';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 import { CodeEditorContextualService } from '../services/CodeEditorContextualService';
 
 export class ExtraService {
@@ -15,10 +15,10 @@ export class ExtraService {
 
     /**
      * @description 获取 HTML 编辑器需要的扩展项
-     * @param {EoAutoCompleteModel[]} eoAutoComplete 编辑器关键字的自动补全提示
+     * @param {AutoCompleteModel[]} autoComplete 编辑器关键字的自动补全提示
      * @return {Extension[]}
      */
-    public getExtensions(autoComplete: EoAutoCompleteModel[] = []): Extension[] {
+    public getExtensions(autoComplete: AutoCompleteModel[] = []): Extension[] {
         // 获取上下文补全
         const contextual = this.codeEditorContextualService.getAutoCompleteConf(htmlLanguage, autoComplete);
 

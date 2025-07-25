@@ -1,14 +1,14 @@
 import { Extension } from '@codemirror/state';
-import { EoAutoCompleteModel } from '../interfaces';
+import { AutoCompleteModel } from '../interfaces';
 
 export class CodeEditorContextualService {
 
     private autoCompleteList: {
-        [key: string]: EoAutoCompleteModel[]
+        [key: string]: AutoCompleteModel[]
     } = {};
 
     // 获取自动匹配插件实例
-    public getAutoCompleteConf(language, autoComplete: EoAutoCompleteModel[] = []): Extension[] {
+    public getAutoCompleteConf(language, autoComplete: AutoCompleteModel[] = []): Extension[] {
         this.autoCompleteList = this.getContextualOptions(autoComplete);
         // 上下文识别
         const contextual = language.data.of({
@@ -18,7 +18,7 @@ export class CodeEditorContextualService {
     }
 
     // 更新控件列表
-    public updateAutoCompleteList(autoCompleteList: EoAutoCompleteModel[]) {
+    public updateAutoCompleteList(autoCompleteList: AutoCompleteModel[]) {
         this.autoCompleteList = this.getContextualOptions(autoCompleteList);
     }
 

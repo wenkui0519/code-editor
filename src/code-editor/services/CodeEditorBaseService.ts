@@ -1,14 +1,13 @@
 import { Compartment, EditorState, Extension } from '@codemirror/state';
 import { EditorView, keymap, Panel, placeholder } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands';
-import { languages } from '@codemirror/language-data';
-import { search, searchKeymap } from '@codemirror/search';
-import { forEachDiagnostic, linter } from '@codemirror/lint';
-import { EoAutoCompleteModel, EoCodeEditorType, SearchFormModel } from '../interfaces';
+import { search } from '@codemirror/search';
+import { forEachDiagnostic } from '@codemirror/lint';
+import { AutoCompleteModel, CodeEditorType, SearchFormModel } from '../interfaces';
 import { basicSetup } from 'codemirror';
 import { indentUnit } from '@codemirror/language';
 import { format, formatWithCursor } from 'prettier';
-import { autocompletionWord, changeValue, getBaseTheme, replaceChineseComma } from './CodeEditorUtilsService';
+import { autocompletionWord, getBaseTheme, replaceChineseComma } from './CodeEditorUtilsService';
 import { CodeEditorKeywordService } from './codeEditorKeyword';
 
 export class CodeEditorBaseService {
@@ -50,6 +49,15 @@ export class CodeEditorBaseService {
             parent: config.element
         });
 
+        // 自动聚焦
+        if (config.autoFocus) {
+            let timer = setTimeout(() => {
+                editorView.focus();
+                clearTimeout(timer);
+                timer = null;
+            }, 100);
+        }
+
         // 快捷键
         const baseKeyMapList = [...defaultKeymap, indentWithTab, {
             key: 'Alt-F', // SHIFT+ALT+F格式化
@@ -58,15 +66,21 @@ export class CodeEditorBaseService {
                 this.format(view, config.editorType);
                 return true;
             },
-            // shift: (view) => this.format(view, eoEditorType),
         }];
-        // const newKeyMapList = [...defaultKeymap, ...extraKeyMap, {
-        //     key: 'Tab', // Tab键
-        //     run: (view) => {
-        //         changeValue(view, config.placeholder || '');
-        //         return true;
-        //     }
-        // }];
+        // 如果有自定义快捷键映射
+        if (config.keyMap?.length) {
+            config.keyMap.forEach((item: any) => {
+                if (item.key && item.run) {
+                    baseKeyMapList.push({
+                        key: item.key,
+                        mac: item.mac || item.key,
+                        run: (view) => {
+                            return item.run(view);
+                        },
+                    });
+                }
+            });
+        }
         this.setEditorProperty(editorView, 'keyMap', baseKeyMapList);
         // 提示文字
         if (config.placeholder) {
@@ -77,8 +91,8 @@ export class CodeEditorBaseService {
             this.setEditorProperty(editorView, 'disabled', this.disabled);
         }
         // 关键字匹配配置
-        if (config.eoKeywordMatching?.length) {
-            this.setEditorProperty(editorView, 'keywordMatching', config.eoKeywordMatching);
+        if (config.keywordMatching?.length) {
+            this.setEditorProperty(editorView, 'keywordMatching', config.keywordMatching);
         }
 
         return editorView;
@@ -94,9 +108,9 @@ export class CodeEditorBaseService {
             // 输入时替换中文符号
             replaceChineseComma(),
             // 缩进单位
-            indentUnit.of(config.eoIndentUnit === 2 ? '  ' : '    '),
+            indentUnit.of(config.indentUnit === 2 ? '  ' : '    '),
             // 搜索
-            this.getSearchExtensions(config.searchElement, config.createSearchPanelBack),
+            this.getSearchExtensions(config.searchElement),
             // 监听编辑器的更改
             this.updateListenerExtension(config.onChange),
             // 提示文字
@@ -116,7 +130,7 @@ export class CodeEditorBaseService {
 
         // 添加不同语言的Extensions
         if (config.editorType) {
-            const extraExtensions = await this.getLanguageSupport(config.editorType, config.eoAutoComplete);
+            const extraExtensions = await this.getLanguageSupport(config.editorType, config.autoComplete);
             if (extraExtensions) {
                 baseExtensions = [
                     ...baseExtensions,
@@ -128,7 +142,7 @@ export class CodeEditorBaseService {
         return baseExtensions;
     }
     // 获取语言包
-    private async getLanguageSupport(type: EoCodeEditorType, autoComplete: EoAutoCompleteModel[]) {
+    private async getLanguageSupport(type: CodeEditorType, autoComplete: AutoCompleteModel[]) {
         let baseClass;
         switch (type) {
             case 'JS':
@@ -176,13 +190,11 @@ export class CodeEditorBaseService {
     /**
      * @description 获取 '搜索' 的扩展
      * @param {ElementRef<any>} searchElement 自定义查询模板
-     * @param {(view: EditorView) => void} createSearchPanelBack 创建查询模板成功后的回调
      * @return {Extension}
      */
-    private getSearchExtensions(searchElement: HTMLDivElement, createSearchPanelBack: (view: EditorView) => void): Extension {
+    private getSearchExtensions(searchElement: HTMLDivElement): Extension {
         return search({
             createPanel: (view: EditorView) => {
-                createSearchPanelBack?.(view);
 
                 const panel: Panel = {
                     top: true,
@@ -213,7 +225,7 @@ export class CodeEditorBaseService {
      * @param editor 编辑器实例
      * @param type 编辑器类型
      */
-    public format(editor: EditorView, type: EoCodeEditorType) {
+    public format(editor: EditorView, type: CodeEditorType) {
         if (this.isFormatting) return;
 
         if (this.baseClass && this.baseClass.format) {
@@ -333,7 +345,7 @@ export class CodeEditorBaseService {
                         }
                     }
                     keywordMatching = this.codeEditorKeywordService.keywordMatching({
-                        eoKeywordMatching: value,
+                        keywordMatching: value,
                         customMatchRule,
                         matchListChange,
                         handleClick,
