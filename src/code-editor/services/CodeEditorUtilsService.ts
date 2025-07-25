@@ -1,7 +1,6 @@
 import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { EditorState, Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import { CompleteTypeClass } from "../interfaces";
 
 /**
   * @description 获取编辑器需要的基本样式主题

@@ -120,33 +120,6 @@ type AutoCompleteType =
     | 'fields' // 字段
     ;
 
-// 图标
-export const CompleteTypeClass = {
-    'class': 'icon-class',
-    'constant': 'icon-file-article',
-    'enum': 'icon-vote-style',
-    'function': 'icon-function',
-    'interface': 'icon-structure-department',
-    'keyword': 'icon-key',
-    'method': 'icon-custom-selector',
-    'namespace': 'icon-space',
-    'property': 'icon-flow-monitor',
-    'text': 'icon-text',
-    'type': 'icon-cube',
-    'variable': 'icon-data-origin',
-    'test': 'icon-source-code',
-    'table': 'icon-form-table',
-    'fields': 'icon-fields',
-}
-// 公开方法
-export enum PublicMethod {
-    insertText = 'insertText',
-    verify = 'verify',
-    getCursor = 'getCursor',
-    format = 'format',
-}
-
-
 export interface CodeEditorProps {
     value?: string; // 编辑器的初始值
     disabled?: boolean; // 是否禁用编辑器

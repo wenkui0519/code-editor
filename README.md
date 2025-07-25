@@ -96,3 +96,25 @@ KeyMapModel
 | key  | string            | win键盘映射按键  |
 | mac  | AutoCompleteType  | mac键盘映射按键  |
 | run  | (view) => boolean | 运行时触发的按键 |
+
+## Type Definitions
+AutoCompleteType
+```typescript
+type AutoCompleteType =
+    | 'class' // 类
+    | 'constant' // 常量
+    | 'enum' // 枚举
+    | 'function' // 函数
+    | 'interface' // 接口
+    | 'keyword' // 关键字
+    | 'method' // 方法
+    | 'namespace' // 命名空间
+    | 'property' // 属性
+    | 'text'  // 文本
+    | 'type' // 类型
+    | 'variable' // 变量
+    | 'test' // 测试
+    | 'table' // 表
+    | 'fields' // 字段
+    ;
+```
