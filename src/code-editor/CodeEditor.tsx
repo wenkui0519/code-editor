@@ -4,7 +4,7 @@ import { SearchPanel } from './components/search-panel/SearchPanel';
 // import { Toolbar } from './components/Toolbar';
 import { useCodeEditor } from './hooks/useCodeEditor';
 import type { CodeEditorProps } from './interfaces';
-import './index.scss';
+import './CodeEditor.scss';
 
 export const CodeEditor: React.FC<CodeEditorProps> = ({
     disabled,

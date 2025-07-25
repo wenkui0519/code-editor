@@ -1,5 +1,5 @@
 {
-  "name": "code-editor",
+  "name": "kui-code-editor",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,20 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "main": "dist/index.umd.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./style.css": "./dist/style.css"
-  },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.6",
     "@codemirror/commands": "^6.8.1",
@@ -57,24 +43,5 @@
     "globals": "^16.3.0",
     "sass": "^1.89.2",
     "vite": "^7.0.4"
-  },
-  "peerDependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
-  },
-  "keywords": [
-    "codemirror6",
-    "code-editor",
-    "react-component"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wenkui0519/code-editor.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wenkui0519/code-editor/issues"
-  },
-  "homepage": "https://github.com/wenkui0519/code-editor#readme"
+  }
 }

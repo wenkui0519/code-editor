@@ -1,6 +1,7 @@
 import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { EditorState, Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
+// import { CompleteTypeClass } from "../interfaces";
 
 /**
   * @description 获取编辑器需要的基本样式主题
@@ -10,6 +11,7 @@ import { EditorView } from "@codemirror/view";
   */
 export function getBaseTheme(): Extension {
     const baseTheme = EditorView.baseTheme({
+
         // 清除编辑器获得焦点时的边框样式
         '&.cm-focused': {
             outline: 'unset',
@@ -27,7 +29,58 @@ export function getBaseTheme(): Extension {
             'z-index': 1,
             'border-bottom': 'unset',
             'box-shadow': '0px 4px 12px rgba(0, 0, 0, 0.15)',
-        }
+        },
+
+        '.code-editor-autocomplete-list': {
+            'padding': '4px 0px',
+            'border-radius': '2px',
+            'background': '#ffffff!important',
+            'border-width': '0',
+            'box-shadow': '0px 2px 8px 0px rgba(15, 21, 75, 0.16)',
+        },
+
+        '.code-editor-autocomplete-option': {
+            'padding': '6px 8px!important',
+            'background': '#ffffff',
+            'font-family': "PingFang SC",
+            'display': 'flex',
+            'align-items': 'center',
+        },
+
+        '.code-editor-autocomplete-option:hover': {
+            'background': '#f2f2f2',
+        },
+        '.code-editor-autocomplete-option .cm-completionLabel': {
+            'color': '#333333',
+        },
+        '.code-editor-autocomplete-option .cm-completionLabel .cm-completionMatchedText': {
+            'color': '#efa50e',
+            'text-decoration': 'unset',
+        },
+        '.code-editor-autocomplete-option .cm-completionDetail': {
+            'font-size': '0.75rem',
+            'margin-left': '8px',
+            'font-style': 'normal',
+            'color': '#999999',
+        },
+
+        '.code-editor-autocomplete-option span.iconfont': {
+            'color': '#999999',
+            'font-size': '1.125rem',
+            'margin-right': '6px',
+        },
+        '.code-editor-autocomplete-option[aria-selected]': {
+            'background': '#f2f2f2!important',
+        },
+
+        '.cm-completionInfo.cm-completionInfo-right': {
+            'padding': '10px 8px',
+            'border-radius': '4px',
+            'background': '#585e6b',
+            'color': '#fff',
+            'font-size': '0.75rem',
+            'margin-left': ' 3px',
+        },
     });
 
     return baseTheme;
@@ -42,13 +95,13 @@ export function autocompletionWord(): Extension {
         closeOnBlur: true,
         tooltipClass: (state: EditorState) => { return 'code-editor-autocomplete-list' },
         optionClass: (completion: Completion) => { return 'code-editor-autocomplete-option' },
-        // icons: false,
+        icons: false,
         // addToOptions: [{
         //     render: (completion, state, view) => {
         //         const { type } = completion,
-        //             className = CompleteTypeClass[type] || 'eui-constant';
+        //             className = CompleteTypeClass[type] || 'icon-constant';
         //         const iconElement = document.createElement("span");
-        //         iconElement.classList.add("eui-icon", className);
+        //         iconElement.classList.add("iconfont", className);
         //         return iconElement;
         //     },
         //     position: 0,
