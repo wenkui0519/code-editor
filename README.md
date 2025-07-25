@@ -98,6 +98,19 @@ KeyMapModel
 | run  | (view) => boolean | 运行时触发的按键 |
 
 ## Type Definitions
+
+CodeEditorType
+```typescript
+type CodeEditorType =
+    | 'SQL' // SQL 编辑器
+    | 'JS' // JavaScript 编辑器
+    | 'HTML' // htm 编辑器
+    | 'FORMULA' // 计算公式
+    | 'JSON' // JSON 编辑器
+    | 'MERMAID' // MERMAID
+    | null;  // 纯净模式
+```
+
 AutoCompleteType
 ```typescript
 type AutoCompleteType =

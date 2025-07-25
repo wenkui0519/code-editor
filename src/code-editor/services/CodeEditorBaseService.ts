@@ -160,6 +160,9 @@ export class CodeEditorBaseService {
             case 'FORMULA':
                 baseClass = (await import('../module/code-editor-formula')).ExtraService;
                 break;
+            case 'MERMAID':
+                baseClass = (await import('../module/code-editor-mermaid')).ExtraService;
+                break;
             default:
                 baseClass = null;
                 break;
