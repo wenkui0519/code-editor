@@ -1,5 +1,5 @@
 import { Compartment, EditorState, Extension } from '@codemirror/state';
-import { EditorView, keymap, placeholder } from '@codemirror/view';
+import { EditorView, keymap, Panel, placeholder } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { languages } from '@codemirror/language-data';
 import { search, searchKeymap } from '@codemirror/search';
@@ -37,7 +37,7 @@ export class CodeEditorBaseService {
     async getEditor(config: any): Promise<EditorView> {
         // 缓存参数
         this._editorConfigPrams = config;
-        
+
         const extensions = await this.createExtensions(config);
 
         const state = EditorState.create({
@@ -95,6 +95,8 @@ export class CodeEditorBaseService {
             replaceChineseComma(),
             // 缩进单位
             indentUnit.of(config.eoIndentUnit === 2 ? '  ' : '    '),
+            // 搜索
+            this.getSearchExtensions(config.searchElement, config.createSearchPanelBack),
             // 监听编辑器的更改
             this.updateListenerExtension(config.onChange),
             // 提示文字
@@ -171,6 +173,26 @@ export class CodeEditorBaseService {
         return updateListenerExtension;
     }
 
+    /**
+     * @description 获取 '搜索' 的扩展
+     * @param {ElementRef<any>} searchElement 自定义查询模板
+     * @param {(view: EditorView) => void} createSearchPanelBack 创建查询模板成功后的回调
+     * @return {Extension}
+     */
+    private getSearchExtensions(searchElement: HTMLDivElement, createSearchPanelBack: (view: EditorView) => void): Extension {
+        return search({
+            createPanel: (view: EditorView) => {
+                createSearchPanelBack?.(view);
+
+                const panel: Panel = {
+                    top: true,
+                    dom: searchElement,
+                };
+
+                return panel;
+            }
+        });
+    }
     /**
      * @description 获取搜索面板表单初始值
      * @return {*}  {SearchFormModel}

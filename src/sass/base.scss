@@ -1,0 +1,39 @@
+$prefix: "cde-";
+
+$theme-color: #4E89F8;
+
+.#{$prefix}text-primary {
+    color: $theme-color !important;
+}
+
+.#{$prefix}text-hover-primary:hover {
+    color: $theme-color !important;
+}
+
+.#{$prefix}bg-primary {
+    background-color: $theme-color !important;
+    color: $theme-color !important;
+}
+
+.#{$prefix}bg-hover-primary:hover {
+    background-color: $theme-color !important;
+    color: $theme-color !important;
+}
+
+.#{$prefix}border-primary {
+    border-color: $theme-color !important;
+}
+
+.#{$prefix}border-hover-primary:hover {
+    border-color: $theme-color !important;
+}
+
+.#{$prefix}primary-active,
+.#{$prefix}bg-primary-hover:hover {
+    background-color: rgba($theme-color, 0.1) !important;
+    color: $theme-color !important;
+}
+
+.#{$prefix}bg-primary-active {
+    background-color: rgba($theme-color, 0.1) !important;
+}

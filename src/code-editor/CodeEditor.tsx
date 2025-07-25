@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { EditorView } from '@codemirror/view';
-// import { SearchPanel } from './components/SearchPanel';
+import { SearchPanel } from './components/search-panel/SearchPanel';
 // import { Toolbar } from './components/Toolbar';
 import { useCodeEditor } from './hooks/useCodeEditor';
 import type { CodeEditorProps } from './interfaces';
-import './index.css';
+import './index.scss';
 
 export const CodeEditor: React.FC<CodeEditorProps> = ({
     disabled,
@@ -33,6 +33,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     const searchRef = useRef<HTMLDivElement>(null);
     const [editorView, setEditorView] = useState<EditorView | null>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchView, setSearchView] = useState(null);
 
     const {
         initializeEditor,
@@ -59,6 +60,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                         eoKeywordMatching,
                         eoIndentUnit,
                         searchElement: searchRef.current,
+                        createSearchPanelBack: setSearchView,
                         customMatchRule,
                         eoLineWrapping,
                         placeholder,
@@ -111,13 +113,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                 />
             )} */}
             <div ref={editorRef} className="code-editor-content" />
-            {/* {isSearchOpen && (
-                <SearchPanel
-                    ref={searchRef}
-                    editorView={editorView}
-                    onClose={() => setIsSearchOpen(false)}
-                />
-            )} */}
+            <SearchPanel
+                ref={searchRef}
+                editorView={editorView}
+            />
         </div>
     );
 };
