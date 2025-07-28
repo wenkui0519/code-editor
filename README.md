@@ -42,6 +42,50 @@ function App() {
 export default App;
 ```
 
+### 使用对外暴露的方法
+
+通过 `ref` 可以访问编辑器实例并调用其方法：
+
+```jsx
+import React, { useRef } from 'react';
+import { CodeEditor, CodeEditorRef } from 'kui-code-editor';
+import 'kui-code-editor/style.css';
+
+function App() {
+  const editorRef = useRef<CodeEditorRef>(null);
+
+  const handleInsertText = () => {
+    editorRef.current?.insertContent('Hello World');
+  };
+
+  const handleChangeValue = () => {
+    editorRef.current?.changeValue('console.log("Hello World");');
+  };
+
+  const handleGetCursor = () => {
+    const cursor = editorRef.current?.getCursor();
+    console.log('当前光标位置:', cursor);
+  };
+
+  return (
+    <div>
+      <div>
+        <button onClick={handleInsertText}>插入文本</button>
+        <button onClick={handleChangeValue}>更改值</button>
+        <button onClick={handleGetCursor}>获取光标位置</button>
+      </div>
+      <CodeEditor
+        ref={editorRef}
+        value="console.log('Hello World');"
+        editorType="JS"
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
 ### 支持的编辑器类型
 
 ```typescript

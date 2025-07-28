@@ -1,3 +1,5 @@
+import { EditorView } from "@codemirror/view";
+
 /** 编辑器类型 */
 export type CodeEditorType =
     | 'SQL' // SQL 编辑器
@@ -138,4 +140,12 @@ export interface CodeEditorProps {
     matchListChange?: (matchList: any[]) => void; // 匹配列表变化时的回调
     onChange?: (value: string) => void; // 编辑器内容变化时的回调
     loaded?: (view: any) => void; // 编辑器加载完成时的回调
+}
+
+export interface CodeEditorRef {
+    changeValue: (value: string) => void;
+    changeRange: (pos: { anchor: number; head?: number }) => void;
+    getCursor: () => { anchor: number; head: number; from: number; to: number; } | null;
+    insertContent: (content: string, pos?: { from: number; to: number }) => void;
+    getInstance: () => EditorView | null;
 }

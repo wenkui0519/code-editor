@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { EditorView } from '@codemirror/view';
 import { CodeEditorBaseService } from '../services/CodeEditorBaseService';
 import type { CodeEditorType } from '../interfaces';
-import { changeValue } from '../services/CodeEditorUtilsService';
+import { changeValue, changeRange, getCursor, insertContent } from '../services/CodeEditorUtilsService';
 
 const baseService = new CodeEditorBaseService();
 
@@ -29,8 +29,17 @@ export const useCodeEditor = () => {
         }
     }, []);
 
+    // 对外暴露的方法
+    const editorMethods = {
+        changeValue,
+        changeRange,
+        getCursor,
+        insertContent
+    };
+
     return {
         initializeEditor,
         updateEditor,
+        editorMethods
     };
 };

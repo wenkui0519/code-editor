@@ -5,5 +5,6 @@ export type {
     CodeEditorProps,
     CodeEditorType,
     AutoCompleteModel,
-    KeywordMatchingModel
+    KeywordMatchingModel,
+    CodeEditorRef
 } from './interfaces';
