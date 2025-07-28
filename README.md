@@ -44,7 +44,7 @@ export default App;
 
 ### 支持的编辑器类型
 
-``typescript
+```typescript
 type CodeEditorType =
   | 'SQL'      // SQL 编辑器
   | 'JS'       // JavaScript 编辑器
