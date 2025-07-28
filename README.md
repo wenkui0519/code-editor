@@ -1,16 +1,15 @@
-# Code Editor
+# KUI Code Editor
 
-一个基于 CodeMirror v6 的 React 代码编辑器组件，支持多种语言（SQL、JavaScript、HTML、JSON、计算公式等）和丰富的功能。
+一个基于 React 和 CodeMirror 6 的可扩展代码编辑器组件，支持多种语言和插件扩展。
 
 ## 特性
 
-- 支持多种语言模式：SQL、JavaScript、HTML、JSON、计算公式、Mermaid
-- 语法高亮
-- 代码自动补全
+- 支持多种语言编辑（HTML、JavaScript、JSON、SQL、Formula、Mermaid）
+- 语法高亮与自动补全
+- 搜索与替换功能
 - 代码格式化（使用 Prettier）
-- 关键字匹配高亮
-- 搜索和替换功能
-- 可自定义主题和配置
+- 集成 ESLint 进行代码检查
+- 支持自定义语言插件
 
 ## 安装
 
@@ -18,8 +17,12 @@
 npm install kui-code-editor
 ```
 
-## 使用
-```js
+## 使用方法
+
+### 基本使用
+
+```jsx
+import React from 'react';
 import { CodeEditor } from 'kui-code-editor';
 import 'kui-code-editor/style.css';
 
@@ -28,34 +31,55 @@ function App() {
     <CodeEditor
       value="console.log('Hello World');"
       editorType="JS"
-      onChange={(value) => console.log(value)}
+      autoComplete={[
+        { label: 'console', type: 'variable' },
+        { label: 'log', type: 'method' }
+      ]}
     />
   );
 }
+
+export default App;
 ```
 
+### 支持的编辑器类型
 
-## 属性
-| 属性名          | 类型                                                   | 描述                     |
-| --------------- | ------------------------------------------------------ | ------------------------ |
-| value           | string                                                 | 编辑器的初始值           |
-| editorType      | CodeEditorType                                         | 编辑器类型               |
-| autoComplete    | AutoCompleteModel[]                                    | 自动补全列表             |
-| indentUnit      | number                                                 | 缩进单位                 |
-| placeholder     | string                                                 | 提示文字                 |
-| lineWrapping    | boolean                                                | 是否启用行换行           |
-| autoFocus       | boolean                                                | 是否自动聚焦             |
-| inclusive       | boolean                                                | 是否将关键字匹配视为整体 |
-| keywordMatching | KeywordMatchingModel[]                                 | 关键字匹配列表           |
-| initMatchList   | any[]                                                  | 初始化匹配列表           |
-| keyMap          | KeyMapModel[]                                          | 键盘映射                 |
-| customMatchRule | (keyword: string) => (contentDOM: HTMLElement) => any; | 自定义匹配规则           |
-| onClickMirror   | (event: MouseEvent) => void;                           | 点击编辑器时的回调       |
-| matchListChange | (matchList: any[]) => void;                            | 匹配列表变化时的回调     |
-| onChange        | (value: string) => void;                               | 编辑器内容变化时的回调   |
-| loaded          | (value: string) => void;                               | 编辑器加载完成时的回调   |
+``typescript
+type CodeEditorType =
+  | 'SQL'      // SQL 编辑器
+  | 'JS'       // JavaScript 编辑器
+  | 'HTML'     // HTML 编辑器
+  | 'FORMULA'  // 计算公式
+  | 'JSON'     // JSON 编辑器
+  | 'DYNAMIC'  // 动态编辑器
+  | 'MERMAID'  // Mermaid 图表
+  | null;      // 纯净模式
+```
 
-## Interfaces
+### 属性说明
+
+| 属性 | 类型 | 说明 |
+| ---- | ---- | ---- |
+| value | string | 编辑器的初始值 |
+| disabled | boolean | 是否禁用编辑器 |
+| editorType | CodeEditorType | 编辑器类型 |
+| autoComplete | AutoCompleteModel[] | 自动补全列表 |
+| indentUnit | number | 缩进单位 |
+| placeholder | string | 提示文字 |
+| lineWrapping | boolean | 是否启用行换行 |
+| autoFocus | boolean | 是否自动聚焦 |
+| inclusive | boolean | 是否将关键字匹配视为整体 |
+| keywordMatching | KeywordMatchingModel[] | 关键字匹配列表 |
+| initMatchList | any[] | 初始化匹配列表 |
+| keyMap | KeyMapModel[] | 键盘映射 |
+| customMatchRule | (keyword: string) => (contentDOM: HTMLElement) => any | 自定义匹配规则 |
+| onClickMirror | (event: MouseEvent) => void | 点击编辑器时的回调 |
+| matchListChange | (matchList: any[]) => void | 匹配列表变化时的回调 |
+| onChange | (value: string) => void | 编辑器内容变化时的回调 |
+| loaded | (view: any) => void | 编辑器加载完成时的回调 |
+
+### Interfaces
+
 AutoCompleteModel
 编辑器关键字的自动补全提示
 
@@ -97,37 +121,27 @@ KeyMapModel
 | mac  | AutoCompleteType  | mac键盘映射按键  |
 | run  | (view) => boolean | 运行时触发的按键 |
 
-## Type Definitions
 
-CodeEditorType
-```typescript
-type CodeEditorType =
-    | 'SQL' // SQL 编辑器
-    | 'JS' // JavaScript 编辑器
-    | 'HTML' // htm 编辑器
-    | 'FORMULA' // 计算公式
-    | 'JSON' // JSON 编辑器
-    | 'MERMAID' // MERMAID
-    | null;  // 纯净模式
+## 开发
+
+### 安装依赖
+
+```bash
+npm install
 ```
 
-AutoCompleteType
-```typescript
-type AutoCompleteType =
-    | 'class' // 类
-    | 'constant' // 常量
-    | 'enum' // 枚举
-    | 'function' // 函数
-    | 'interface' // 接口
-    | 'keyword' // 关键字
-    | 'method' // 方法
-    | 'namespace' // 命名空间
-    | 'property' // 属性
-    | 'text'  // 文本
-    | 'type' // 类型
-    | 'variable' // 变量
-    | 'test' // 测试
-    | 'table' // 表
-    | 'fields' // 字段
-    ;
+### 启动开发服务器
+
+```bash
+npm run dev
 ```
+
+### 构建
+
+```bash
+npm run build
+```
+
+## 许可证
+
+MIT
