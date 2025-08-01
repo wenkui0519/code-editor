@@ -11,12 +11,6 @@
 - 集成 ESLint 进行代码检查
 - 支持自定义语言插件
 
-## 安装
-
-```bash
-npm install kui-code-editor
-```
-
 ## 使用方法
 
 ### 基本使用
